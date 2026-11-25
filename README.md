@@ -322,9 +322,11 @@ Suggestions and improvements are welcome. Fork the repository, create a feature 
 
 ## License and Acknowledgments
 
-A repository license should be selected by the project owner before granting reuse rights. Review the applicable Ultralytics YOLO licensing terms and other third-party dependency licenses before distributing or deploying the project.
+ParkVision was developed as an academic minor project for educational, research, and demonstration purposes.
 
-Built using Python, Flask, MySQL, Ultralytics YOLO11 and the open-source Python ecosystem.
+All original project code and documentation remain the intellectual property of their respective developers. Permission must be obtained from the project owners before commercial use, modification, or redistribution, except where applicable third-party licenses grant such rights.
+
+ParkVision uses Ultralytics YOLO11 and other third-party libraries, which remain subject to their respective licensing terms.
 
 ------------------------------------------------------------------------
 
