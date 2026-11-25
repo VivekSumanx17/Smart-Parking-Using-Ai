@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | ParkVision</title>
+
+    <link rel="stylesheet" href="/static/admin.css">
+    <script src="/static/admin.js" defer></script>
+</head>
+
+<body>
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">◈</span>
+            ParkVision
+            <small>ADMIN PANEL</small>
+        </div>
+
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-link active"
+               data-page="dashboard">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a href="#bookings" class="nav-link"
+               data-page="bookings">
+                <span>▤</span> Bookings
+            </a>
+
+            <a href="#slots" class="nav-link"
+               data-page="slots">
+                <span>▣</span> Parking Slots
+            </a>
+
+            <a href="#customers" class="nav-link"
+               data-page="customers">
+                <span>♙</span> Customers
+            </a>
+
+            <a href="#reports" class="nav-link"
+               data-page="reports">
+                <span>▥</span> Reports
+            </a>
+        </nav>
+
+
+        <div class="sidebar-bottom">
+            <span>ParkVision Management</span>
+            <button id="logoutBtn" type="button">
+                Log out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">PARKVISION / ADMIN</p>
+                <h1>Dashboard Overview</h1>
+                <p class="subtitle">
+                    Monitor your parking system in one place.
+                </p>
+            </div>
+
+            <div class="admin-profile">
+                <div class="avatar">A</div>
+                <div>
+                    <strong id="adminName">Administrator</strong>
+                    <small>System Admin</small>
+                </div>
+            </div>
+        </header>
+
+        <!-- Statistics -->
+        <div id="dashboardPage" class="admin-page">
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span>Total Parking Slots</span>
+                    <span class="stat-icon">▣</span>
+                </div>
+                <h2 id="totalSlots">--</h2>
+                <p>Registered parking spaces</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span>Occupied Slots</span>
+                    <span class="stat-icon red">●</span>
+                </div>
+                <h2 id="occupiedSlots">--</h2>
+                <p>Occupied in the latest scan</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span>Total Bookings</span>
+                    <span class="stat-icon purple">▤</span>
+                </div>
+                <h2 id="totalBookings">--</h2>
+                <p>Pending and confirmed bookings</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-heading">
+                    <span>Total Customers</span>
+                    <span class="stat-icon blue">♙</span>
+                </div>
+                <h2 id="totalCustomers">--</h2>
+                <p>Registered customer accounts</p>
+            </article>
+
+            <article class="stat-card revenue-card">
+                <div class="stat-heading">
+                    <span>Demo Booking Revenue</span>
+                    <span class="stat-icon">₹</span>
+                </div>
+                <h2 id="totalRevenue">--</h2>
+                <p>Total value of confirmed bookings</p>
+            </article>
+
+        </section>
+        </div>
+
+        <!-- Parking overview -->
+        <section class="content-grid">
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Parking Occupancy</h2>
+                        <p>Latest detected occupancy</p>
+                    </div>
+                    <span class="live-indicator">Live data</span>
+                </div>
+
+                <div class="occupancy-details">
+                    <div>
+                        <span>Occupancy Rate</span>
+                        <strong id="occupancyPercent">--%</strong>
+                    </div>
+
+                    <div class="progress-track">
+                        <div id="occupancyBar"
+                             class="progress-fill"></div>
+                    </div>
+
+                    <div class="occupancy-footer">
+                        <span id="occupiedSummary">-- occupied</span>
+                        <span id="availableSummary">-- not occupied</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>System Status</h2>
+                        <p>Admin dashboard connection</p>
+                    </div>
+                </div>
+
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    <div>
+                        <strong>Dashboard connected</strong>
+                        <p id="lastUpdated">
+                            Waiting for data...
+                        </p>
+                    </div>
+                </div>
+
+                <button id="refreshBtn"
+                        class="refresh-btn"
+                        type="button">
+                    Refresh Statistics
+                </button>
+            </article>
+
+        </section>
+<div id="bookingsPage" class="admin-page" hidden>
+<section class="panel bookings-panel" id="bookingManagement">
+
+    <div class="panel-heading">
+        <div>
+            <h2>Booking Management</h2>
+            <p>View and manage customer reservations</p>
+        </div>
+
+        <button id="refreshBookings"
+                class="refresh-btn"
+                type="button">
+            Refresh
+        </button>
+    </div>
+
+    <div class="booking-toolbar">
+        <label for="bookingFilter">Filter by status</label>
+
+        <select id="bookingFilter">
+            <option value="all">All Bookings</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="bookings-table">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Slot</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="bookingRows">
+                <tr>
+                    <td colspan="8">Loading bookings...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</div>
+
+
+<div id="slotsPage" class="admin-page" hidden>
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Parking Slot Management</h2>
+                <p>Monitor slots and configure hourly rates</p>
+            </div>
+
+            <button id="refreshSlots"
+                    class="refresh-btn"
+                    type="button">
+                Refresh
+            </button>
+        </div>
+
+        <p id="slotNotice" role="status"></p>
+
+        <div class="table-wrapper">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Slot ID</th>
+                        <th>Occupancy</th>
+                        <th>Hourly Rate (₹)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="adminSlotRows">
+                    <tr>
+                        <td colspan="4">
+                            Loading parking slots...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+
+
+<div id="customersPage" class="admin-page" hidden>
+
+    <section class="bookings-panel">
+
+        <div class="booking-toolbar">
+            <div>
+                <h2>Customer Management</h2>
+                <p>Manage registered ParkVision customers</p>
+            </div>
+
+            <button
+                id="refreshCustomers"
+                class="refresh-btn"
+                type="button">
+                Refresh Customers
+            </button>
+        </div>
+
+        <div class="booking-toolbar">
+            <input
+                type="search"
+                id="customerSearch"
+                placeholder="Search by name or email..."
+                class="customer-search">
+        </div>
+
+        <p id="customerNotice" role="status"></p>
+
+        <div class="table-wrapper">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Verified</th>
+                        <th>Bookings</th>
+                        <th>Joined</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="customerRows">
+                    <tr>
+                        <td colspan="9">
+                            Loading customers...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+    <section
+        id="customerHistoryPanel"
+        class="bookings-panel"
+        hidden>
+
+        <div class="booking-toolbar">
+            <h2 id="customerHistoryTitle">
+                Customer Booking History
+            </h2>
+
+            <button
+                id="closeCustomerHistory"
+                class="refresh-btn"
+                type="button">
+                Close
+            </button>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Slot</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="customerHistoryRows"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+</div>
+
+
+
+<div id="reportsPage" class="admin-page" hidden>
+    <section class="bookings-panel">
+        <div class="booking-toolbar">
+            <div>
+                <h2>Reports & Analytics</h2>
+                <p>Analyze reservations and simulated booking value</p>
+            </div>
+            <button id="exportReport" class="refresh-btn" type="button">
+                Download CSV
+            </button>
+        </div>
+
+        <div class="report-filters">
+            <label>
+                From
+                <input type="date" id="reportStart">
+            </label>
+            <label>
+                To
+                <input type="date" id="reportEnd">
+            </label>
+            <button id="applyReport" class="refresh-btn" type="button">
+                Apply Filter
+            </button>
+        </div>
+
+        <p id="reportNotice" role="status"></p>
+
+        <div class="report-metrics">
+            <article class="report-metric">
+                <span>Total Bookings</span>
+                <strong id="reportTotal">—</strong>
+            </article>
+            <article class="report-metric">
+                <span>Confirmed</span>
+                <strong id="reportConfirmed">—</strong>
+            </article>
+            <article class="report-metric">
+                <span>Cancelled</span>
+                <strong id="reportCancelled">—</strong>
+            </article>
+            <article class="report-metric">
+                <span>Demo Booking Value</span>
+                <strong id="reportValue">—</strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="bookings-panel">
+        <h2>Daily Booking Trend</h2>
+        <p class="report-description">
+            Bookings grouped by the date they were created.
+        </p>
+        <div id="dailyChart" class="daily-chart"></div>
+    </section>
+
+    <section class="bookings-panel">
+        <h2>Slot-wise Performance</h2>
+        <div class="table-wrapper">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>Parking Slot</th>
+                        <th>Total Bookings</th>
+                        <th>Confirmed Booking Value</th>
+                    </tr>
+                </thead>
+                <tbody id="reportSlotRows"></tbody>
+            </table>
+
+        </div>
+    </section>
+
+<!-- Detailed Booking Report -->
+<section class="bookings-panel">
+    <h2>Booking Details</h2>
+    <p class="report-description">
+        Bookings filtered by scheduled parking date.
+        The creation date shows when the customer
+        originally made the reservation.
+    </p>
+
+    <div class="table-wrapper">
+        <table class="bookings-table">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Slot</th>
+                    <th>Booking Created</th>
+                    <th>Parking Start</th>
+                    <th>Parking End</th>
+                    <th>Duration</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="reportBookingRows">
+                <tr>
+                    <td colspan="9">Loading bookings...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</div>
+
+
+
+        <footer>
+            ParkVision · Smart Parking Management
+        </footer>
+
+    </main>
+</div>
+</body>
+</html>

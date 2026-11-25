@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login | ParkVision</title>
+<link rel="stylesheet" href="/static/auth.css">
+<main class="auth-card">
+    <a href="/">◈ ParkVision</a>
+    <h1>Welcome back</h1>
+    <p>Sign in to manage your parking reservations.</p>
+    <form id="form">
+        <label>Email</label>
+        <input id="email" type="email" required autocomplete="email">
+        <label>Password</label>
+        <input id="password" type="password" required autocomplete="current-password">
+        <button>Sign in</button>
+    </form>
+    <p id="notice" role="status"></p>
+    <p>New customer? <a href="/signup">Create an account</a></p>
+</main>
+
+<script>
+    document.getElementById('form').onsubmit = async (e) => {
+        e.preventDefault();
+
+        const r = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            })
+        });
+
+        const d = await r.json();
+
+        if (r.ok) {
+            window.location.href = d.redirect || '/';
+        } else {
+            document.getElementById('notice').textContent =
+                d.error || 'Login failed';
+        }
+    };
+</script>
+
+</html>
