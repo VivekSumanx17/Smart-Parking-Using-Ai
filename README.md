@@ -141,14 +141,14 @@ ParkVision/
 
 ## Installation and Setup
 
-### 1. Prerequisites {#1-prerequisites}
+### 1. Prerequisites 
 
 -   Python 3 with a version supported by the installed PyTorch and Ultralytics packages
 -   MySQL Server (MySQL Workbench is optional)
 -   Git
 -   Gmail account with an app password for OTP delivery
 
-### 2. Clone the repository {#2-clone-the-repository}
+### 2. Clone the repository 
 
 Replace the placeholders with the actual GitHub username and repository name.
 
@@ -157,7 +157,7 @@ git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 cd YOUR_REPOSITORY
 ```
 
-### 3. Create a virtual environment {#3-create-a-virtual-environment}
+### 3. Create a virtual environment 
 
 Windows PowerShell:
 
@@ -173,7 +173,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 4. Install dependencies {#4-install-dependencies}
+### 4. Install dependencies
 
 If the repository includes a requirements file:
 
@@ -189,7 +189,7 @@ pip install flask ultralytics shapely pillow numpy python-dotenv pymysql werkzeu
 
 Use the working development environment to generate and verify the final dependency manifest before publishing.
 
-### 5. Configure MySQL {#5-configure-mysql}
+### 5. Configure MySQL 
 
 Create the database:
 
@@ -211,7 +211,7 @@ Main database tables:
   `bookings`        Reservations, dates, prices and status
   `payments`        Payment-related records where configured
 
-### 6. Configure environment variables {#6-configure-environment-variables}
+### 6. Configure environment variables 
 
 Create a `.env` file in the project root. Example configuration (replace placeholders):
 
@@ -236,7 +236,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 For Gmail OTP, enable two-step verification and create an app password if your Google account supports it. Never publish real credentials. Use `COOKIE_SECURE=1` when deploying behind HTTPS.
 
-### 7. Prepare model and annotations {#7-prepare-model-and-annotations}
+### 7. Prepare model and annotations 
 
 Ensure `yolo11n.pt` is available in the project root. If necessary, obtain it using Ultralytics from that directory:
 
@@ -246,7 +246,7 @@ python -c "from ultralytics import YOLO; YOLO('yolo11n.pt')"
 
 Provide `annotations/parking_slots.json` (or `parking_slots.json` in the root), containing the actual reference image dimensions and slot polygon coordinates. Use matching parking-area images and initialize the corresponding database slot and rate records.
 
-### 8. Run the application {#8-run-the-application}
+### 8. Run the application 
 
 ``` bash
 python app.py
